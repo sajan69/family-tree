@@ -1,0 +1,70 @@
+{
+    "languageSelector": {
+      "english": "English",
+      "nepali": "Nepali"
+    },
+    "familyTree": {
+      "title": "Adhikari Family Tree",
+      "generation": "Generation",
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out"
+    },
+    "updateForm": {
+      "title": "Update Family Data",
+      "parent": "Parent",
+      "selectParent": "Select Parent",
+      "name": "Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "relation": "Relation",
+      "selectRelation": "Select Relation",
+      "son": "Son",
+      "daughter": "Daughter",
+      "contactNumber": "Contact Number",
+      "address": "Address",
+      "email": "Email",
+      "spouse": "Spouse",
+      "birthDate": "Birth Date",
+      "deathDate": "Death Date",
+      "profilePic": "Profile Picture URL",
+      "profilePicNotice": "Please provide a Google Drive image link.",
+      "addMember": "Add Family Member"
+    },
+    "familyMember": {
+      "name": "Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "contactNumber": "Contact Number",
+      "address": "Address",
+      "email": "Email",
+      "spouse": "Spouse",
+      "notMarried": "Not Married",
+      "maritalStatus": "Marital Status",
+      "birthDate": "Birth Date",
+      "deathDate": "Death Date",
+      "relation": "Relation",
+      "son": "Son",
+      "daughter": "Daughter",
+      "unknown": "Unknown",
+      "parentDataUnavailable": "Parent data unavailable",
+      "parentNotFound": "Parent not found",
+      "of": "of",
+      "personalInfo": "Personal Information",
+      "downloadIDCard": "Download ID Card PDF",
+      "idCard": "Family Member ID Card"
+    },
+    "sideBar": {
+      "familyTree": "Family Tree",
+      "updateForm": "Update Form",
+      "idCardGenerator": "ID Card Generator"
+    },
+    "close": "Close",
+    "present": "Present",
+    "adhikariFamily": "Adhikari Family",
+    "ahikariFamilyTree": "Adhikari Family Tree",
+    "welcome": "Welcome to the Adhikari Family Tree",
+    "explore": "Explore your family history and keep your family connections strong.",
+    "copyright": "© 2023 Adhikari Family Tree. All rights reserved.",
+    "viewFamilyTree": "View Family Tree",
+    "updateFamilyData": "Update Family Data"
+  }
