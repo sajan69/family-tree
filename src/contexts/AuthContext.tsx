@@ -1,5 +1,6 @@
 'use client'
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import familyConfig from '../config/familyConfig.json';
 
 interface AuthContextType {
   isLoggedIn: boolean;

@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import familyConfig from '../config/familyConfig.json';
 
 export function translateDatabaseField(field: string, value: string): string {
   const fieldParts = field.split('.');
@@ -26,4 +27,24 @@ export function translateDatabaseField(field: string, value: string): string {
   
   // If no specific translation found, return the original value
   return typeof translation === 'string' ? translation : value;
+}
+
+export function replacePlaceholders(text: string): string {
+  return text
+    .replace(/{{familyName}}/g, familyConfig.familyName)
+    .replace(/{{familyNepaliName}}/g, familyConfig.familyNepaliName)
+    .replace(/{{currentYear}}/g, new Date().getFullYear().toString());
+}
+
+export function translate(key: string, options?: object): string {
+  let translation = i18n.t(key, options);
+  return replacePlaceholders(translation);
+}
+
+export function translateFamilyConfig(key: string): string {
+  const configKey = `${key}Key` as keyof typeof familyConfig;
+  if (configKey in familyConfig) {
+    return translate(familyConfig[configKey] as string);
+  }
+  return familyConfig[key as keyof typeof familyConfig] || key;
 }

@@ -4,7 +4,7 @@
       "nepali": "Nepali"
     },
     "familyTree": {
-      "title": "Adhikari Family Tree",
+      "title": "{{familyName}} Family Tree",
       "generation": "Generation",
       "zoomIn": "Zoom In",
       "zoomOut": "Zoom Out"
@@ -58,15 +58,18 @@
       "updateForm": "Update Form",
       "idCardGenerator": "ID Card Generator",
       "logout": "Logout",
-      "login": "Login"
+      "login": "Login",
+      "family": "Family"
     },
     "close": "Close",
     "present": "Present",
-    "adhikariFamily": "Adhikari Family",
-    "ahikariFamilyTree": "Adhikari Family Tree",
-    "welcome": "Welcome to the Adhikari Family Tree",
+    "familyName": "{{familyName}}",
+    "familyTreeTitle": "{{familyName}} Family Tree",
+    "welcome": "Welcome to the {{familyName}} Family Tree",
     "explore": "Explore your family history and keep your family connections strong.",
-    "copyright": "© 2023 Adhikari Family Tree. All rights reserved.",
+    "copyright": "© {{currentYear}} {{familyName}} Family Tree. All rights reserved.",
+    "logoAlt": "{{familyName}} Family Tree Logo",
+
     "viewFamilyTree": "View Family Tree",
     "updateFamilyData": "Update Family Data",
     "noImage": "No Image",

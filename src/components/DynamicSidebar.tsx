@@ -2,6 +2,9 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { FaBars } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import familyConfig from '../config/familyConfig.json';
+import { translateFamilyConfig } from '../utils/translate';
 
 
 const SidebarComponent = dynamic(() => import('./Sidebar'), {
@@ -16,6 +19,7 @@ const DynamicSidebar: React.FC<DynamicSidebarProps> = ({ onSidebarStateChange })
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState('16rem');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -48,8 +52,8 @@ const DynamicSidebar: React.FC<DynamicSidebarProps> = ({ onSidebarStateChange })
       {isMobile && (
         <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-gray-900 p-4">
           <div className="flex items-center">
-            <img src="/adhikari.png" alt="Adhikari Logo" className="h-8 w-8 mr-2" />
-            <span className="text-white font-bold">Adhikari Family</span>
+            <img src={familyConfig.logoPath} alt={translateFamilyConfig('logoAlt')} className="h-8 w-8 mr-2" />
+            <span className="text-white font-bold">{translateFamilyConfig('familyName')}</span>
           </div>
           <button
             onClick={toggleSidebar}

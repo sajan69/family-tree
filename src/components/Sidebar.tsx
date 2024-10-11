@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { FaChevronLeft, FaChevronRight, FaTree, FaEdit, FaTimes, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
+import familyConfig from '../config/familyConfig.json';
+import { translateFamilyConfig } from '@/utils/translate';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -40,8 +42,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, isMobile
     <aside className={sidebarClass}>
       <div className={`flex items-center p-4 ${isCollapsed && !isMobile ? 'justify-center' : 'justify-between'}`}>
         <Link href="/" className="flex items-center">
-          <Image src="/adhikari.png" alt="Family Tree Logo" width={40} height={40} className={isCollapsed && !isMobile ? '' : 'mr-4 w-100'} />
-          {(!isCollapsed || isMobile) && <h1 className="text-xl font-bold">{t("adhikariFamily")}</h1>}
+          <Image src={familyConfig.logoPath} alt={`${familyConfig.familyName} Logo`} width={40} height={40} className={isCollapsed && !isMobile ? '' : 'mr-4 w-100'} />
+          {(!isCollapsed || isMobile) && <h1 className="text-xl font-bold">{translateFamilyConfig('familyName')} {t("sideBar.family")}</h1>}
         </Link>
         
         {isMobile ? (
