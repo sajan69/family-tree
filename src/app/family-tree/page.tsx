@@ -10,17 +10,9 @@ export default function FamilyTreePage() {
   const { t } = useTranslation();
   const familyTreeRef = useRef<{ scrollToMember: (memberId: string) => void } | null>(null);
 
-  useEffect(() => {
-    const handleSidebarChange = (e: CustomEvent) => {
-      setSidebarCollapsed(e.detail.isCollapsed);
-    };
-
-    window.addEventListener('sidebarStateChange', handleSidebarChange as EventListener);
-
-    return () => {
-      window.removeEventListener('sidebarStateChange', handleSidebarChange as EventListener);
-    };
-  }, []);
+  const handleSidebarStateChange = (isCollapsed: boolean) => {
+    setSidebarCollapsed(isCollapsed);
+  };
 
   const handleSearchSelect = (memberId: string) => {
     if (familyTreeRef.current) {
@@ -29,14 +21,20 @@ export default function FamilyTreePage() {
   };
 
   return (
-    <div className="flex">
-      <DynamicSidebar />
-      <main className={`flex-1 p-6 bg-gray-100 transition-all duration-300 ${sidebarCollapsed ? 'ml-20' : 'ml-64'}`}>
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">{t("ahikariFamilyTree")}</h1>
-          <FamilySearch onSelect={handleSearchSelect} />
+    <div className="flex flex-col h-screen">
+      <DynamicSidebar onSidebarStateChange={handleSidebarStateChange} />
+      <main className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${
+        sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+      } pt-16 md:pt-0`}>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-0 md:mb-4 mt-4">
+          <div className="flex justify-between items-center w-full sm:w-auto mb-4 sm:mb-0">
+            <h1 className="text-2xl md:text-3xl font-bold mr-4 ml-4">{t("ahikariFamilyTree")}</h1>
+            <FamilySearch onSelect={handleSearchSelect} />
+          </div>
         </div>
-        <FamilyTree ref={familyTreeRef as React.RefObject<HTMLDivElement>} />
+        <div className="flex-1 overflow-auto p-0">
+          <FamilyTree ref={familyTreeRef as React.RefObject<HTMLDivElement>} />
+        </div>
       </main>
     </div>
   );

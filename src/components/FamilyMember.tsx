@@ -74,7 +74,7 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
   return (
     <div className="relative">
       <DialogTrigger>
-        <Button className={`family-member ${genderClass} ${isHighlighted ? 'highlighted' : ''}`}>
+        <Button className={`family-member ${genderClass} ${isHighlighted ? 'highlighted' : ''} w-full sm:w-auto`}>
           {member.profilePic ? (
             <Image 
               src={member.profilePic}
@@ -82,53 +82,55 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
               width={100} 
               height={100} 
               priority
-              className={`rounded-full ${isHighlighted ? 'ring-4 ring-yellow-400' : ''}`}
+              className={`rounded-full ${isHighlighted ? 'ring-4 ring-yellow-400' : ''} mx-auto`}
             />
           ) : (
-            <div className={`placeholder-image ${isHighlighted ? 'ring-4 ring-yellow-400' : ''}`}></div>
+            <div className={`placeholder-image ${isHighlighted ? 'ring-4 ring-yellow-400' : ''} mx-auto`}></div>
           )}
-          <h3 className={isHighlighted ? 'text-yellow-600 font-bold' : ''}>
+          <h3 className={`text-sm sm:text-base ${isHighlighted ? 'text-yellow-600 font-bold' : ''}`}>
             {`${member.name} 
               ${member.middleName ? member.middleName : ''} 
               ${member.lastName}`}
           </h3>
-          <p className="birth-date">
+          <p className="birth-date text-xs sm:text-sm">
             {`${member.birthDate} - 
               ${member.deathDate ? member.deathDate : t('present')}`}
           </p>
           {member.spouse && (
-            <p className="spouse">
+            <p className="spouse text-xs sm:text-sm">
               ❤️ {member.spouse}
             </p>
           )}
         </Button>
-        <ModalOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Modal className="bg-white p-6 rounded-lg shadow-xl w-[1050px] max-h-[110vh] overflow-y-auto">
+        <ModalOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Modal className="bg-white p-4 sm:p-6 rounded-lg shadow-xl w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] overflow-y-auto">
             <Dialog>
               {({close}) => (
                 <>
                   <div className="flex justify-between items-center mb-4">
-                    <Heading slot="title" className="text-2xl font-bold">
+                    <Heading slot="title" className="text-xl sm:text-2xl font-bold">
                       {t('familyMember.idCard')}
                     </Heading>
                     <Button onPress={close} className="text-gray-500 hover:text-gray-700">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </Button>
                   </div>
-                  <div ref={pdfRef} className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-lg flex" style={{width: '1000px', height: '600px'}}>
-                    <div className="w-1/2 flex flex-col items-center justify-center border-r border-gray-300 pr-6">
+                  <div ref={pdfRef} className="bg-gradient-to-r from-blue-100 to-purple-100 p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row">
+                    <div className="w-full sm:w-1/2 flex flex-col items-center justify-center sm:border-r sm:border-gray-300 sm:pr-6 mb-4 sm:mb-0">
                       {member.profilePic && (
+                        <div className="relative w-48 h-48 mb-4">
                         <Image 
                           src={member.profilePic}
                           alt={member.name} 
-                          width={200} 
-                          height={200} 
+                          layout="fill"
+                          objectFit="cover"
                           priority
-                          className="rounded-full mb-4 border-4 border-white shadow-lg"
-                        />
+                          className="rounded-full border-4 border-white shadow-lg"
+                          />
+                        </div>
                       )}
-                      <h2 className="text-3xl font-bold mb-2">{`${member.name} ${member.lastName}`}</h2>
-                      <p className="text-xl mb-4 text-gray-600">
+                      <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-center">{`${member.name} ${member.lastName}`}</h2>
+                      <p className="text-lg sm:text-xl mb-4 text-gray-600 text-center">
                         {member.relation === 'son' ? t('familyMember.son') : t('familyMember.daughter')} 
                         {member.parentId && ` ${t('familyMember.of')} ${member.parentName}`}
                       </p>
@@ -136,7 +138,7 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
                         <QRCodeSVG value={memberInfo} size={128} level="H" />
                       </div>
                     </div>
-                    <div className="w-1/2 pl-6">
+                    <div className="w-full sm:w-1/2 sm:pl-6">
                       <h3 className="text-xl font-semibold mb-3">{t('familyMember.personalInfo')}</h3>
                       <p><strong>{t('familyMember.birthDate')}:</strong> {member.birthDate} - {member.deathDate ? member.deathDate : t('present')}</p>
                       {member.spouse ? (
@@ -165,6 +167,6 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
       </DialogTrigger>
     </div>
   );
-};
+}
 
 export default FamilyMemberComponent;

@@ -56,7 +56,9 @@
     "sideBar": {
       "familyTree": "Family Tree",
       "updateForm": "Update Form",
-      "idCardGenerator": "ID Card Generator"
+      "idCardGenerator": "ID Card Generator",
+      "logout": "Logout",
+      "login": "Login"
     },
     "close": "Close",
     "present": "Present",
@@ -66,5 +68,10 @@
     "explore": "Explore your family history and keep your family connections strong.",
     "copyright": "© 2023 Adhikari Family Tree. All rights reserved.",
     "viewFamilyTree": "View Family Tree",
-    "updateFamilyData": "Update Family Data"
+    "updateFamilyData": "Update Family Data",
+    "noImage": "No Image",
+    "searchFamilyMember": "Search Family Member",
+    "password": "Password",
+    "username": "Username",
+    "backToHome": "Back to Home"
   }

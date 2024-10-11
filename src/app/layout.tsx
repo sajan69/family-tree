@@ -1,5 +1,7 @@
+
 import './globals.css'
 import { Inter } from 'next/font/google'
+import { Providers } from './providers'
 import ClientWrapper from '../components/ClientWrapper'
 import LanguageSelector from '../components/LanguageSelector'
 
@@ -13,11 +15,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientWrapper>
-          <LanguageSelector />
-          {children}
-        </ClientWrapper>
+        <Providers>
+          <ClientWrapper>
+            <LanguageSelector />
+            {children}
+          </ClientWrapper>
+        </Providers>
       </body>
     </html>
   )
-}
+  }

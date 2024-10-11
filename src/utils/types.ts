@@ -16,3 +16,9 @@ export interface FamilyMember {
     deathDate?: string;
     profilePic?: string;
   }
+
+  export interface User {
+    id: string;
+    username: string;
+    password: string;
+  }

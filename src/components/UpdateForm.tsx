@@ -4,9 +4,11 @@ import { database } from '../utils/firebase';
 import { FamilyMember } from '../utils/types';
 import { useTranslation } from 'react-i18next';
 import { uploadToCloudinary } from '../utils/cloudinaryConfig';
+import { useRouter } from 'next/navigation';
 
 const UpdateForm: React.FC = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [formData, setFormData] = useState<Partial<FamilyMember>>({
     lastName: 'Adhikari',
   });
@@ -14,6 +16,12 @@ const UpdateForm: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
     const familyRef = ref(database, 'family');
     onValue(familyRef, (snapshot) => {
       const data = snapshot.val();
@@ -22,8 +30,7 @@ const UpdateForm: React.FC = () => {
         setAllMembers(members);
       }
     });
-  }, []);
- 
+  }, [router]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -45,7 +52,6 @@ const UpdateForm: React.FC = () => {
       setImageFile(e.target.files[0]);
     }
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parentMember = allMembers.find(member => member.id === formData.parentId);
@@ -90,8 +96,7 @@ const UpdateForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto">
-      
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4">
       <div className="mb-4">
         <label htmlFor="parentId" className="block mb-2">{t('updateForm.parent')}</label>
         <select
@@ -115,7 +120,7 @@ const UpdateForm: React.FC = () => {
           <p className="p-2 bg-gray-100 rounded">{formData.parentName}</p>
         </div>
       )}
-
+  
       <div className="mb-4">
         <label htmlFor="name" className="block mb-2">{t('updateForm.name')}</label>
         <input
@@ -128,7 +133,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="middleName" className="block mb-2">{t('updateForm.middleName')}</label>
         <input
@@ -140,7 +145,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="lastName" className="block mb-2">{t('updateForm.lastName')}</label>
         <input
@@ -153,7 +158,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="relation" className="block mb-2">{t('updateForm.relation')}</label>
         <select
@@ -169,7 +174,7 @@ const UpdateForm: React.FC = () => {
           <option value="daughter">{t('updateForm.daughter')}</option>
         </select>
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="contactNumber" className="block mb-2">{t('updateForm.contactNumber')}</label>
         <input
@@ -182,7 +187,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="address" className="block mb-2">{t('updateForm.address')}</label>
         <input
@@ -195,7 +200,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="email" className="block mb-2">{t('updateForm.email')}</label>
         <input
@@ -207,7 +212,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="spouse" className="block mb-2">{t('updateForm.spouse')}</label>
         <input
@@ -219,7 +224,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="birthDate" className="block mb-2">{t('updateForm.birthDate')}</label>
         <input
@@ -232,7 +237,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="deathDate" className="block mb-2">{t('updateForm.deathDate')}</label>
         <input
@@ -244,7 +249,7 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
+  
       <div className="mb-4">
         <label htmlFor="profilePic" className="block mb-2">{t('updateForm.profilePic')}</label>
         <input
@@ -256,8 +261,8 @@ const UpdateForm: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+  
+      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full">
         {t('updateForm.addMember')}
       </button>
     </form>
