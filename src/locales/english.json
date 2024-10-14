@@ -93,5 +93,20 @@
     "searchFamilyMember": "Search Family Member",
     "password": "Password",
     "username": "Username",
-    "backToHome": "Back to Home"
-  }
+    "backToHome": "Back to Home",
+    "features": {
+    "interactiveTree": "Interactive Family Tree",
+    "interactiveTreeDesc": "Explore your family history with our interactive and easy-to-navigate family tree.",
+    "search": "Advanced Search",
+    "searchDesc": "Quickly find family members with our powerful search functionality.",
+    "collaboration": "Family Collaboration",
+    "collaborationDesc": "Work together with your family to keep your tree up-to-date and accurate.",
+    "multilingual": "Multilingual Support",
+    "multilingualDesc": "Access your family tree in multiple languages, including English and Nepali."
+  },
+  "createYourOwn": "Create Your Own",
+  "createYourOwnDesc": "Customize your family tree with your own data and information.",
+  "viewOnGithub": "View on GitHub",
+  "interestedInCreatingYourOwn": "Interested in creating your own family tree?",
+  "checkOutRepo": "Check out the repo!"
+}

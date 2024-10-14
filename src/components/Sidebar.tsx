@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import familyConfig from '../config/familyConfig.json';
 import { translateFamilyConfig } from '@/utils/translate';
+import { useEffect, useState } from 'react';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -18,13 +19,19 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, isMobile, isOpen, toggleSidebar }) => {
   const { t } = useTranslation();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const router = useRouter();
+  const [authState, setAuthState] = useState(isLoggedIn);
+
+  useEffect(() => {
+    setAuthState(isLoggedIn);
+  }, [isLoggedIn, user]);
 
   const menuItems = [
     { href: '/family-tree', label: t("sideBar.familyTree"), icon: FaTree },
-    ...(isLoggedIn ? [{ href: '/update-data', label: t("sideBar.updateForm"), icon: FaEdit }] : []),
+    ...(authState ? [{ href: '/update-data', label: t("sideBar.updateForm"), icon: FaEdit }] : []),
   ];
+
   const handleLogout = () => {
     logout();
     router.push('/');
@@ -81,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, isMobile
             </li>
           ))}
           <li>
-            {isLoggedIn ? (
+            {authState ? (
               <button
                 onClick={handleLogout}
                 className={`flex items-center p-2 rounded-lg transition-colors duration-200 text-gray-400 hover:bg-gray-800 hover:text-white ${isCollapsed && !isMobile ? 'justify-center' : ''} w-full`}

@@ -191,8 +191,8 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
             </p>
           )}
         </Button>
-        <ModalOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Modal className="bg-white p-4 sm:p-6 rounded-lg shadow-xl w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] overflow-y-auto">
+        <ModalOverlay className="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Modal className=" modal-content bg-white p-4 sm:p-6 rounded-lg shadow-xl w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] overflow-y-auto">
             <Dialog>
               {({close}) => (
                 <>
@@ -204,7 +204,7 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </Button>
                   </div>
-                  <div ref={pdfRef} className="bg-gradient-to-r from-blue-100 to-purple-100 p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row">
+                  <div ref={pdfRef} className="modal-id-card bg-gradient-to-r from-blue-100 to-purple-100 p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row">
                     <div className="w-full sm:w-1/2 flex flex-col items-center justify-center sm:border-r sm:border-gray-300 sm:pr-6 mb-4 sm:mb-0">
                       {member.profilePic && (
                         <div className="relative w-48 h-48 mb-4">
@@ -271,8 +271,8 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
       </DialogTrigger>
 
       <DialogTrigger isOpen={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <ModalOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-          <Modal className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <ModalOverlay className="modal-overlay  fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Modal className=" modal-content bg-white p-4 sm:p-6 rounded-lg shadow-xl w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] overflow-y-auto">
             <Dialog>
               {({close}) => (
                 <>

@@ -7,6 +7,8 @@ import LanguageSelector from '../components/LanguageSelector'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Metadata } from 'next'
+import { ThemeProvider } from 'next-themes'
+import ThemeToggle from '../components/ThemeToggle'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -58,16 +60,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Providers>
-          <ClientWrapper>
-            <LanguageSelector />
-            {children}
-          </ClientWrapper>
-        </Providers>
-        <ToastContainer />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Providers>
+            <ClientWrapper>
+              <ThemeToggle />
+              <LanguageSelector />
+              {children}
+              <ToastContainer />
+            </ClientWrapper>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   )
-  }
+}

@@ -285,3 +285,193 @@ body {
   display: flex;
   justify-content: center;
 }
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animated {
+  background: linear-gradient(-45deg, #0a0a14, #0b101f, #071830, #121212, #0f1d29, #162028, #1a242f, #162028, #0a0a14);
+  background-size: 400% 400%;
+  animation: gradientAnimation 30s ease infinite;
+}
+.bg-gradient-animated-dark {
+  background: linear-gradient(-45deg, #0a0a14, #0b101f, #071830, #121212, #0f1d29, #162028, #1a242f, #162028, #0a0a14);
+  background-size: 400% 400%;
+  animation: gradientAnimation 30s ease infinite;
+}
+/* ... (previous styles) */
+
+/* Dark mode styles */
+.dark {
+  --background: #1a1a2e;
+  --foreground: #e1e1e1;
+}
+
+.dark body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.dark .family-tree-container {
+  background-color: #16213e;
+}
+
+.dark .family-member {
+  background-color: #0f3460;
+  color: #e1e1e1;
+}
+
+.dark .family-member h3 {
+  color: #ffffff;
+}
+
+.dark .family-member p {
+  color: #b0b0b0;
+}
+
+.dark .family-member .relation {
+  color: #4a9eff;
+}
+
+.dark .family-member .birth-date {
+  color: #8e8e8e;
+}
+
+.dark .family-member .contact-info {
+  border-top: 1px solid #2c3e50;
+}
+
+.dark .family-member .contact-info svg {
+  color: #b0b0b0;
+}
+
+.dark .son { background-color: #1a3d5c; }
+.dark .daughter { background-color: #5c1a3d; }
+
+.dark .placeholder-image {
+  background-color: #2c3e50;
+}
+
+.dark .zoom-controls button {
+  background-color: #4a90e2;
+  color: #ffffff;
+}
+
+.dark .zoom-controls button:hover {
+  background-color: #357abd;
+}
+
+.dark .modal-content {
+  background-color: #1a1a2e;
+  color: #e1e1e1;
+}
+
+.dark .close-button {
+  color: #e1e1e1;
+}
+
+.dark .download-button, .dark .qr-button {
+  background-color: #4a90e2;
+  color: #ffffff;
+}
+
+.dark .download-button:hover, .dark .qr-button:hover {
+  background-color: #357abd;
+}
+
+/* New dark mode styles for modals and forms */
+.dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dark .modal-content {
+  background-color: #1a1a2e;
+  color: #e1e1e1;
+}
+
+.dark input[type="text"],
+.dark input[type="tel"],
+.dark input[type="email"],
+.dark input[type="date"],
+.dark select {
+  background-color: #2c3e50;
+  color: #e1e1e1;
+  border-color: #4a5568;
+}
+
+.dark .modal-id-card {
+
+  background: linear-gradient(to right, #1a1a2e, #2c3e50);
+  color: #e1e1e1;
+  border: 1px solid #4a5568;
+}
+
+.dark input[type="file"] {
+  color: #e1e1e1;
+}
+
+.dark label {
+  color: #e1e1e1;
+}
+
+.dark .text-gray-600 {
+  color: #a0aec0;
+}
+
+.dark .bg-gray-300 {
+  background-color: #4a5568;
+}
+
+.dark .text-gray-800 {
+  color: #e2e8f0;
+}
+
+.dark .hover\:bg-gray-400:hover {
+  background-color: #718096;
+}
+
+.dark .bg-blue-500 {
+  background-color: #3182ce;
+}
+
+.dark .hover\:bg-blue-600:hover {
+  background-color: #2c5282;
+}
+
+/* Dark mode styles for FamilySearch component */
+.dark .search-input {
+  background-color: #2c3e50;
+  color: #e1e1e1;
+  border-color: #4a5568;
+}
+
+.dark .search-results {
+  background-color: #1a1a2e;
+  border-color: #4a5568;
+}
+
+.dark .search-result-item {
+  border-color: #4a5568;
+}
+
+.dark .search-result-item:hover {
+  background-color: #2c3e50;
+}
+
+.dark .no-results {
+  color: #a0aec0;
+}

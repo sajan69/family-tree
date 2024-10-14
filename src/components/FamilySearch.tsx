@@ -76,14 +76,14 @@ const FamilySearch: React.FC<Props> = ({ onSelect }) => {
         />
       </div>
       {suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+        <ul className="search-results absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
           {suggestions.map((member) => (
             <li
               key={member.id}
               onClick={() => handleSelect(member.id)}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer search-result-item"
             >
-              {`${member.name} ${member.middleName} ${member.lastName}`}
+              {`${member.name} ${member.middleName ? member.middleName : ''} ${member.lastName}`}
             </li>
           ))}
         </ul>
