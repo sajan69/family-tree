@@ -167,7 +167,14 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
               className={`rounded-full ${isHighlighted ? 'ring-4 ring-yellow-400' : ''} mx-auto`}
             />
           ) : (
-            <div className={`placeholder-image ${isHighlighted ? 'ring-4 ring-yellow-400' : ''} mx-auto`}></div>
+            <Image
+              src="/default_profile_pic.png"
+              alt={member.name}
+              width={100}
+              height={100}
+              priority
+              className={`rounded-full ${isHighlighted ? 'ring-4 ring-yellow-400' : ''} mx-auto`}
+            />
           )}
           <h3 className={`text-sm sm:text-base ${isHighlighted ? 'text-yellow-600 font-bold' : ''}`}>
             {`${member.name} 
@@ -242,17 +249,19 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
                     )}
                   </div> 
                   {isLoggedIn && (
+                     <div className=" flex flex-col items-center">
                     <Button 
                       onPress={() => {
-                        console.log('Edit button clicked');
+                        
                         close(); // Close the ID card modal
                         setIsEditModalOpen(true);
                       }} 
-                      className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+                      className="mt-4 bg-green-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 flex items-center transition duration-300"
                     >
                       <FaEdit className="mr-2 inline" />
                       {t('familyMember.editInfo')}
                     </Button>
+                    </div>
                   )}
                 </>
               )}
@@ -404,6 +413,18 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
                         accept="image/*"
                         className="w-full p-2 border rounded"
                       />
+                      {editFormState.profilePic && (
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-600 mb-1">{t('updateForm.currentProfilePic')}</p>
+                          <Image 
+                            src={editFormState.profilePic}
+                            alt={member.name} 
+                            width={100} 
+                            height={100} 
+                            
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="flex justify-end space-x-2 mt-6">
                       <Button 

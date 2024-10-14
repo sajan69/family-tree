@@ -27,6 +27,7 @@
     "birthDate": "जन्म मिति",
     "deathDate": "मृत्यु मिति",
     "profilePic": "प्रोफाइल तस्वीर URL",
+    "currentProfilePic": "वर्तमान प्रोफाइल तस्वीर",
     "profilePicNotice": "कृपया Google Drive इमेज लिंक प्रदान गर्नुहोस्।",
     "addMember": "परिवार सदस्य थप्नुहोस्",
     "memberAddedSuccessfully": "सदस्य थपियो",
@@ -44,6 +45,7 @@
     "maritalStatus": "विवाह स्थिति",
     "birthDate": "जन्म मिति",
     "deathDate": "मृत्यु मिति",
+
     "relation": "सम्बन्ध",
     "son": "छोरा",
     "daughter": "छोरी",
