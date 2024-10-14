@@ -28,7 +28,9 @@
       "deathDate": "Death Date",
       "profilePic": "Profile Picture URL",
       "profilePicNotice": "Please provide a Google Drive image link.",
-      "addMember": "Add Family Member"
+      "addMember": "Add Family Member",
+      "memberAddedSuccessfully": "Member added successfully",
+      "imageUploadError": "Failed to upload image"
     },
     "familyMember": {
       "name": "Name",
@@ -51,7 +53,20 @@
       "of": "of",
       "personalInfo": "Personal Information",
       "downloadIDCard": "Download ID Card PDF",
-      "idCard": "Family Member ID Card"
+      "idCard": "Family Member ID Card",
+      "editInfo": "Edit Info",
+    "editMemberInfo": "Edit Member Information",
+      "save": "Save",
+      "cancel": "Cancel",
+      "memberUpdatedSuccessfully": "Member updated successfully",
+      "memberUpdateError": "Failed to update member information. Please try again.",
+      "imageUploadError": "Failed to upload image. Please try again.",
+      "pdfGeneratedSuccess": "PDF generated successfully",
+      "pdfGenerationError": "Failed to generate PDF. Please try again.",
+      "simplePdfGenerated": "Generated a simple text-based PDF as a fallback.",
+      "allPdfGenerationFailed": "Failed to generate any PDF. Please try again later.",
+      "updateSuccess": "Member information updated successfully",
+      "updateError": "Failed to update member information. Please try again."
     },
     "sideBar": {
       "familyTree": "Family Tree",

@@ -148,7 +148,7 @@ Replace the logo file at the path specified in `familyConfig.json` with your own
 
 1. Log in using the provided authentication system.
 2. Navigate to the "Update Data" page.
-3. Use the form to add new family members or update existing information.
+3. Use the form to add new family members or update existing information from the family tree page directly.
 
 ### Searching for Family Members
 

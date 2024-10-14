@@ -28,7 +28,9 @@
     "deathDate": "मृत्यु मिति",
     "profilePic": "प्रोफाइल तस्वीर URL",
     "profilePicNotice": "कृपया Google Drive इमेज लिंक प्रदान गर्नुहोस्।",
-    "addMember": "परिवार सदस्य थप्नुहोस्"
+    "addMember": "परिवार सदस्य थप्नुहोस्",
+    "memberAddedSuccessfully": "सदस्य थपियो",
+    "imageUploadError": "तस्वीर अपलोड गर्न सकियो"
   },
   "familyMember": {
     "name": "नाम",
@@ -51,7 +53,20 @@
     "of": "का",
     "personalInfo": "व्यक्तिगत जानकारी",
     "downloadIDCard": "आईडी कार्ड डाउनलोड गर्नुहोस्",
-    "idCard": "परिवार सदस्य आईडी कार्ड"
+    "idCard": "परिवार सदस्य आईडी कार्ड",
+    "editInfo": "जानकारी सम्पादन गर्नुहोस्",
+    "editMemberInfo": "सदस्य जानकारी सम्पादन गर्नुहोस्",
+    "save": "सञ्झाल",
+    "cancel": "रद्द गर्नुहोस्",
+    "memberUpdatedSuccessfully": "सदस्य सफलतापूर्वक अपडेट गरियो",
+    "memberUpdateError": "सदस्य जानकारी अपडेट गर्न सकियो। कृपया पुनः प्रयास गर्नुहोस्।",
+    "imageUploadError": "तस्वीर अपलोड गर्न सकियो। कृपया पुनः प्रयास गर्नुहोस्।",
+    "pdfGeneratedSuccess": "PDF सफलतापूर्वक जनरेट गरियो",
+    "pdfGenerationError": "PDF जनरेट गर्न सकियो। कृपया पुनः प्रयास गर्नुहोस्।",
+    "simplePdfGenerated": "साधारण टेक्स्ट आधारित PDF जनरेट गरियो।",
+    "allPdfGenerationFailed": "कुनै प्रकारको PDF जनरेट गर्न सकियो। कृपया अर्को विद्यमान हुनुहोस्।",
+    "updateSuccess": "सदस्य जानकारी सफलतापूर्वक अपडेट गरियो",
+    "updateError": "सदस्य जानकारी अपडेट गर्न सकियो। कृपया पुनः प्रयास गर्नुहोस्।"
   },
   "sideBar": {
     "familyTree": "परिवार वृक्ष",

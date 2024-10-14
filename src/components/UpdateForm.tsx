@@ -5,6 +5,8 @@ import { FamilyMember } from '../utils/types';
 import { useTranslation } from 'react-i18next';
 import { uploadToCloudinary } from '../utils/cloudinaryConfig';
 import { useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateForm: React.FC = () => {
   const { t } = useTranslation();
@@ -41,7 +43,7 @@ const UpdateForm: React.FC = () => {
         setFormData(prev => ({
           ...prev,
           parentId: value,
-          parentName: `${selectedParent.name} ${selectedParent.lastName}`
+          parentName: `${selectedParent.name}${selectedParent.middleName ? ` ${selectedParent.middleName}` : ''} ${selectedParent.lastName}`
         }));
       }
     }
@@ -75,14 +77,14 @@ const UpdateForm: React.FC = () => {
             ...newMemberData,
             id: newMemberRef.key,
           });
-
+          toast.success(t('updateForm.memberAddedSuccessfully'));
           setFormData({ lastName: 'Adhikari' });
           setImageFile(null);
         };
         reader.readAsDataURL(imageFile);
       } catch (error) {
         console.error('Failed to upload image:', error);
-        // Handle the error appropriately (e.g., show an error message to the user)
+        toast.error(t('updateForm.imageUploadError'));
       }
     } else {
       const newMemberRef = push(ref(database, 'family'));
@@ -90,12 +92,13 @@ const UpdateForm: React.FC = () => {
         ...newMemberData,
         id: newMemberRef.key,
       });
-
+      toast.success(t('updateForm.memberAddedSuccessfully'));
       setFormData({ lastName: 'Adhikari' });
     }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4">
       <div className="mb-4">
         <label htmlFor="parentId" className="block mb-2">{t('updateForm.parent')}</label>
@@ -109,7 +112,7 @@ const UpdateForm: React.FC = () => {
           <option value="">{t('updateForm.selectParent')}</option>
           {allMembers.map(member => (
             <option key={member.id} value={member.id}>
-              {`${member.name} ${member.lastName}`}
+              {`${member.name}${member.middleName ? ` ${member.middleName}` : ''} ${member.lastName}`}
             </option>
           ))}
         </select>
@@ -266,6 +269,9 @@ const UpdateForm: React.FC = () => {
         {t('updateForm.addMember')}
       </button>
     </form>
+    <ToastContainer position="bottom-right" containerId="updateForm" />
+    </>
+
   );
 };
 

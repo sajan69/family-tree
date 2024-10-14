@@ -1,24 +1,45 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FamilyMember } from '../utils/types';
 import { useTranslation } from 'react-i18next';
 import { DialogTrigger, Button, ModalOverlay, Modal, Dialog, Heading } from 'react-aria-components';
-import { FaDownload } from 'react-icons/fa';
+import { FaDownload, FaEdit } from 'react-icons/fa';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import { QRCodeSVG } from 'qrcode.react';
+import { useAuth } from '../contexts/AuthContext';
+import { ref, update } from 'firebase/database';
+import { database } from '../utils/firebase';
+import { uploadToCloudinary } from '../utils/cloudinaryConfig';
+import Swal from 'sweetalert2';
+
+interface EditFormState extends FamilyMember {}
 
 interface Props {
   member: FamilyMember;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isHighlighted: boolean;
+  onMemberUpdate: (updatedMember: FamilyMember) => void;
 }
 
-const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHighlighted }) => {
+const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHighlighted, onMemberUpdate }) => {
   const { t } = useTranslation();
+  const { isLoggedIn } = useAuth();
   const pdfRef = useRef<HTMLDivElement>(null);
   const genderClass = member.relation === 'son' ? 'son' : 'daughter';
   const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormState, setEditFormState] = useState<EditFormState>({ ...member });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    console.log('FamilyMemberComponent rendered');
+    console.log('Is user logged in?', isLoggedIn);
+    console.log('Is edit modal open?', isEditModalOpen);
+    return () => {
+      console.log('FamilyMemberComponent unmounted');
+    };
+  }, [isLoggedIn, isEditModalOpen]);
 
   const memberInfo = `
     Name: ${member.name} ${member.middleName || ''} ${member.lastName}
@@ -30,6 +51,14 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
     Address: ${member.address}
     ${member.email ? `Email: ${member.email}` : ''}
   `;
+  const showAlert = (title: string, text: string, icon: 'success' | 'error' | 'warning' | 'info') => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+      confirmButtonText: 'OK'
+    });
+  };
 
   const generatePDF = async () => {
     if (pdfRef.current) {
@@ -52,29 +81,82 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
 
         doc.addImage(canvas, 'PNG', 0, 0, imgWidth, imgHeight);
         doc.save(`${member.name}_${member.lastName}_ID.pdf`);
+        showAlert(t('familyMember.pdfGeneratedSuccess'), t('familyMember.pdfGeneratedSuccess'), 'success');
         setError(null);
       } catch (err) {
         console.error('Error generating PDF:', err);
-        setError('Failed to generate PDF. Please try again.');
+        showAlert(t('familyMember.pdfGenerationError'), t('familyMember.pdfGenerationError'), 'error');
         
         // Fallback: Generate a simple text-based PDF
         try {
           const doc = new jsPDF();
           doc.text(memberInfo, 10, 10);
           doc.save(`${member.name}_${member.lastName}_simple.pdf`);
-          setError('Generated a simple text-based PDF as a fallback.');
+          showAlert(t('familyMember.pdfGeneratedSuccess'), t('familyMember.pdfGeneratedSuccess'), 'success');
         } catch (fallbackErr) {
           console.error('Fallback PDF generation failed:', fallbackErr);
-          setError('Failed to generate any PDF. Please try again later.');
+          showAlert(t('familyMember.pdfGenerationError'), t('familyMember.pdfGenerationError'), 'error');
         }
       }
     }
   };
 
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setEditFormState(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      let updatedMember = { ...editFormState };
+
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          try {
+            const base64String = reader.result as string;
+            const profilePicUrl = await uploadToCloudinary(base64String);
+            updatedMember.profilePic = profilePicUrl;
+
+            await updateMemberInDatabase(updatedMember);
+            console.log('data:', updatedMember);
+            // showToast(t('familyMember.memberUpdatedSuccessfully'), 'success');
+          } catch (err) {
+            console.error('Error uploading image:', err);
+            showAlert(t('familyMember.imageUploadError'), t('familyMember.imageUploadError'), 'error');
+          }
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        await updateMemberInDatabase(updatedMember);
+        showAlert(t('familyMember.memberUpdatedSuccessfully'), t('familyMember.memberUpdatedSuccessfully'), 'success');
+      }
+    } catch (err) {
+      console.error('Error updating member:', err);
+      showAlert(t('familyMember.memberUpdateError'), t('familyMember.memberUpdateError'), 'error');
+    }
+  };
+
+  const updateMemberInDatabase = async (updatedMember: FamilyMember) => {
+    const memberRef = ref(database, `family/${member.id}`);
+    await update(memberRef, updatedMember);
+    onMemberUpdate(updatedMember);
+    setIsEditModalOpen(false);
+    setError(null);
+  };
+
   return (
+    <>
     <div className="relative">
       <DialogTrigger>
-        <Button className={`family-member ${genderClass} ${isHighlighted ? 'highlighted' : ''} w-full sm:w-auto`}>
+      <Button className={`family-member ${genderClass} ${isHighlighted ? 'highlighted' : ''} w-full sm:w-auto`}>
           {member.profilePic ? (
             <Image 
               src={member.profilePic}
@@ -107,7 +189,7 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
             <Dialog>
               {({close}) => (
                 <>
-                  <div className="flex justify-between items-center mb-4">
+                   <div className="flex justify-between items-center mb-4">
                     <Heading slot="title" className="text-xl sm:text-2xl font-bold">
                       {t('familyMember.idCard')}
                     </Heading>
@@ -158,7 +240,194 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
                     {error && (
                       <p className="text-red-500 mt-2">{error}</p>
                     )}
+                  </div> 
+                  {isLoggedIn && (
+                    <Button 
+                      onPress={() => {
+                        console.log('Edit button clicked');
+                        close(); // Close the ID card modal
+                        setIsEditModalOpen(true);
+                      }} 
+                      className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+                    >
+                      <FaEdit className="mr-2 inline" />
+                      {t('familyMember.editInfo')}
+                    </Button>
+                  )}
+                </>
+              )}
+            </Dialog>
+          </Modal>
+        </ModalOverlay>
+      </DialogTrigger>
+
+      <DialogTrigger isOpen={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <ModalOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+          <Modal className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <Dialog>
+              {({close}) => (
+                <>
+                  <div className="flex justify-between items-center mb-4">
+                    <Heading slot="title" className="text-2xl font-bold">
+                      {t('familyMember.editMemberInfo')}
+                    </Heading>
+                    <Button onPress={close} className="text-gray-500 hover:text-gray-700">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </Button>
                   </div>
+                  <form onSubmit={handleEditSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="name" className="block mb-1">{t('updateForm.name')}</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={editFormState.name}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="middleName" className="block mb-1">{t('updateForm.middleName')}</label>
+                      <input
+                        type="text"
+                        id="middleName"
+                        name="middleName"
+                        value={editFormState.middleName || ''}
+                        onChange={handleEditChange}
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block mb-1">{t('updateForm.lastName')}</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={editFormState.lastName}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="relation" className="block mb-1">{t('updateForm.relation')}</label>
+                      <select
+                        id="relation"
+                        name="relation"
+                        value={editFormState.relation}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="son">{t('updateForm.son')}</option>
+                        <option value="daughter">{t('updateForm.daughter')}</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="contactNumber" className="block mb-1">{t('updateForm.contactNumber')}</label>
+                      <input
+                        type="tel"
+                        id="contactNumber"
+                        name="contactNumber"
+                        value={editFormState.contactNumber}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="address" className="block mb-1">{t('updateForm.address')}</label>
+                      <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        value={editFormState.address}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block mb-1">{t('updateForm.email')}</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={editFormState.email || ''}
+                        onChange={handleEditChange}
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="spouse" className="block mb-1">{t('updateForm.spouse')}</label>
+                      <input
+                        type="text"
+                        id="spouse"
+                        name="spouse"
+                        value={editFormState.spouse || ''}
+                        onChange={handleEditChange}
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="birthDate" className="block mb-1">{t('updateForm.birthDate')}</label>
+                      <input
+                        type="date"
+                        id="birthDate"
+                        name="birthDate"
+                        value={editFormState.birthDate}
+                        onChange={handleEditChange}
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="deathDate" className="block mb-1">{t('updateForm.deathDate')}</label>
+                      <input
+                        type="date"
+                        id="deathDate"
+                        name="deathDate"
+                        value={editFormState.deathDate || ''}
+                        onChange={handleEditChange}
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="profilePic" className="block mb-1">{t('updateForm.profilePic')}</label>
+                      <input
+                        type="file"
+                        id="profilePic"
+                        name="profilePic"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div className="flex justify-end space-x-2 mt-6">
+                      <Button 
+                        type="button" 
+                        onPress={() => {
+                          close();
+                          setEditFormState({ ...member });
+                          console.log('Closing edit modal');
+                        }}
+                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition duration-300"
+                      >
+                        {t('cancel')}
+                      </Button>
+                      <Button 
+                        type="submit"
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+                      >
+                        {t('save')}
+                      </Button>
+                    </div>
+                  </form>
+                  {error && (
+                    <p className="text-red-500 mt-2">{error}</p>
+                  )}
                 </>
               )}
             </Dialog>
@@ -166,6 +435,8 @@ const FamilyMemberComponent: React.FC<Props> = ({ member, setIsModalOpen, isHigh
         </ModalOverlay>
       </DialogTrigger>
     </div>
+      
+      </>
   );
 }
 

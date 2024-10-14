@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
-import { ref as databaseRef, onValue } from 'firebase/database';
+import { ref as databaseRef, onValue, update } from 'firebase/database';
 import { database } from '../utils/firebase';
 import FamilyMemberComponent from './FamilyMember';
 import { FamilyMember } from '../utils/types';
@@ -67,20 +67,16 @@ const FamilyTree = forwardRef<FamilyTreeRef, FamilyTreeProps>((props, ref) => {
       const memberElement = document.getElementById(`family-member-${memberId}`);
       const container = document.querySelector('.family-tree-container');
       if (memberElement && container) {
-        // Set a higher zoom level for focusing on the searched member
-        const focusZoom = 0.8; // Adjust this value as needed
+        const focusZoom = 0.8;
         setZoom(focusZoom);
   
-        // Wait for the zoom to be applied
         setTimeout(() => {
           const containerRect = container.getBoundingClientRect();
           const memberRect = memberElement.getBoundingClientRect();
   
-          // Calculate the scroll position to center the member
           const scrollLeft = memberRect.left + memberRect.width / 2 - containerRect.width / 2;
           const scrollTop = memberRect.top + memberRect.height / 2 - containerRect.height / 2;
   
-          // Scroll to the calculated position
           container.scrollTo({
             left: container.scrollLeft + scrollLeft,
             top: container.scrollTop + scrollTop,
@@ -98,17 +94,13 @@ const FamilyTree = forwardRef<FamilyTreeRef, FamilyTreeProps>((props, ref) => {
             setTimeout(() => {
               photoElement.style.boxShadow = '';
               setHighlightedMemberId(null);
-              // Optionally, zoom back out after a delay
-              // setTimeout(() => setZoom(1), 3000);
             }, 2000);
           } else {
             setTimeout(() => {
               setHighlightedMemberId(null);
-              // Optionally, zoom back out after a delay
-              // setTimeout(() => setZoom(1), 3000);
             }, 2000);
           }
-        }, 300); // Wait for zoom transition to complete
+        }, 300);
       }
     }
   }));
@@ -116,6 +108,19 @@ const FamilyTree = forwardRef<FamilyTreeRef, FamilyTreeProps>((props, ref) => {
   const handleZoom = useCallback((delta: number) => {
     setZoom(prevZoom => Math.max(0.1, Math.min(2, prevZoom + delta)));
   }, []);
+
+  const handleMemberUpdate = async (updatedMember: FamilyMember) => {
+    try {
+      const memberRef = databaseRef(database, `family/${updatedMember.id}`);
+      await update(memberRef, updatedMember);
+      setFamilyData(prevData => 
+        prevData.map(member => member.id === updatedMember.id ? updatedMember : member)
+      );
+    } catch (error) {
+      console.error('Error updating member:', error);
+      // Handle error (e.g., show an error message to the user)
+    }
+  };
 
   const renderFamilyTree = (members: FamilyMember[]) => {
     const rootMembers = members.filter(member => !member.parentId);
@@ -133,6 +138,7 @@ const FamilyTree = forwardRef<FamilyTreeRef, FamilyTreeProps>((props, ref) => {
               member={member} 
               setIsModalOpen={setIsModalOpen}
               isHighlighted={highlightedMemberId === member.id}
+              onMemberUpdate={handleMemberUpdate}
             />
             {children.length > 0 && (
               <ul className="flex flex-row justify-center">
@@ -182,5 +188,7 @@ const FamilyTree = forwardRef<FamilyTreeRef, FamilyTreeProps>((props, ref) => {
     </div>
   );
 });
+
+FamilyTree.displayName = 'FamilyTree';
 
 export default FamilyTree;
