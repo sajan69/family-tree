@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-animated dark:bg-gradient-animated-dark flex flex-col items-center justify-center p-8 text-gray-800 dark:text-white">
-      <form onSubmit={handleSubmit} className="modal-content bg-white p-8 rounded shadow-md w-96">
+      <form onSubmit={handleSubmit} className="login-form  p-8 rounded shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">{t("sideBar.login")}</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
